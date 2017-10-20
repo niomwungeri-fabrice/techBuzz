@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-9">
+				<div class="card">
+					<h:form id="postingForm">
+						<p:panel header="New Post" toggleable="true">
+							<div class="ui-fluid">
+
+								<p:inputTextarea rows="3" placeholder="Speak your mind"
+									value="#{postingBean.post.description}" />
+							</div>
+							<p:watermark value="Tags" for="themes" />
+							<p:autoComplete id="themes" multiple="true"
+								value="#{postingBean.selectedTags}"
+								completeMethod="#{postingBean.autoCompleteTags}" var="theme"
+								itemLabel="#{theme.label}" itemValue="#{theme}"
+								converter="entityConverter" forceSelection="true" />
+							<p:commandButton style="float:right;margin-bottom:15px;"
+								update="postPanel" action="#{postingBean.newPost()}"
+								icon="fa fa-plus" />
+						</p:panel>
+						<p:outputPanel id="postPanel" style="margin-top:20px;">
+							<p:repeat var="ps" value="#{postingBean.posts()}">
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-lg-12">
+										<p:graphicImage cache="false"
+											style="position:center;height: 30px; border-radius: 40%;"
+											styleClass="img-circle"
+											url="/resources/ultima-layout/images/user-pro.png" />
+										<h:outputFormat
+											value="  #{ps.user.firstName.toUpperCase()} #{ps.user.lastName}"
+											style="font-weight:bold;" />
+
+										<h:outputFormat value=" @#{ps.user.email}" style="color:grey;" />
+										<br />
+										<h:outputLabel value="#{ps.description}" style="color:black;" />
+										<br /> <br />
+										<h:outputLabel
+											value="#{postingBean.convertToTime(ps.createdOn)}"
+											style="color:grey;margin-bottom:0px;" />
+										<br />
+										<div class="ui-g">
+											<div class="ui-g-1">
+												<p:commandLink oncomplete="PF('dlgComment').show()"
+													update="@widgetVar(dlgComment)" process="@this">
+													<i class="fa fa-comment-o" />
+												</p:commandLink>
+												<div class="ui-fluid">
+													<p:dialog header="Comment" widgetVar="dlgComment"
+														width="400" resizable="false" modal="true"
+														draggable="false" responsive="true" hideEffect="scale">
+														<div class="ui-g form-group" style="margin-bottom: 16px;">
+
+															<div class="ui-g-12">
+																<h:panelGroup styleClass="md-inputfield">
+																	<p:inputTextarea />
+																	<label>Message</label>
+																</h:panelGroup>
+															</div>
+														</div>
+
+														<f:facet name="footer">
+															<p:commandButton value="Reply" onclick="PF('dlg').hide()"
+																style="width:auto" />
+														</f:facet>
+													</p:dialog>
+												</div>
+
+											</div>
+											<div class="ui-g-1">
+												<p:outputPanel id="likePanel">
+													<p:commandLink action="#{postingBean.like(ps)}"
+														update="likePanel">
+														<i class="fa #{postingBean.customIcon(ps)}"> #{ps.likes}</i>
+													</p:commandLink>
+												</p:outputPanel>
+											</div>
+											<div class="ui-g-1">
+												<p:commandLink>
+													<i class="fa fa-retweet" />
+												</p:commandLink>
+											</div>
+											<div class="ui-g-1">
+												<p:commandLink oncomplete="PF('dlg').show()"
+													update="@widgetVar(dlg)" process="@this">
+													<i class="fa fa-envelope-o" />
+												</p:commandLink>
+												<div class="ui-fluid">
+													<p:dialog header="Send personal email" widgetVar="dlg"
+														resizable="false" modal="true" draggable="false"
+														responsive="true" hideEffect="scale">
+														<div class="ui-g form-group" style="margin-bottom: 16px;">
+															<div class="ui-g-12">
+																<h:panelGroup styleClass="md-inputfield">
+																	<p:inputText value="#{ps.user.email}" disabled="true" />
+																	<label>Email</label>
+																</h:panelGroup>
+															</div>
+															<div class="ui-g-12">
+																<h:panelGroup styleClass="md-inputfield">
+																	<p:inputTextarea />
+																	<label>Message</label>
+																</h:panelGroup>
+															</div>
+														</div>
+
+														<f:facet name="footer">
+															<p:commandButton value="Send" type="button"
+																onclick="PF('dlg').hide()" style="width:auto"
+																icon="fa fa-send-o" />
+														</f:facet>
+													</p:dialog>
+												</div>
+
+											</div>
+
+											<div class="ui-g-7" />
+										</div>
+									</div>
+								</div>
+								<hr />
+							</p:repeat>
+						</p:outputPanel>
+					</h:form>
+				</div>
+			</div>
+			<div class="ui-g-3">
+				<div class="card" align="center">
+					<h2>Trending</h2>
+					<p:separator />
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

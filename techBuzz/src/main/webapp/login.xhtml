@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>Login - Tech Buzz</title>
+	<h:outputScript name="js/ripple.js" library="ultima-layout" />
+	<h:outputScript name="js/layout.js" library="ultima-layout" />
+	<h:outputStylesheet library="bootstrap-4.0.0-beta-dist/css"
+		name="bootstrap.min.css" />
+	<h:outputStylesheet library="bootstrap-4.0.0-beta-dist/css"
+		name="bootstrap-theme.css" />
+</h:head>
+
+<h:body style="background-color:teal;">
+	<div class="ui-fluid" style="margin-top: 50px;">
+		<h:form id="loginForm">
+			<p:growl id="growl" showDetail="true" />
+			<div class="ui-g-8" align="center">
+				<p:outputPanel style="margin-top:100px;">
+					<h1 style="color: white;">Welcome to Tech buzz.</h1>
+					<br />
+					<h3 style="color: white; font-family: monaco;">Connect with
+						your friends — and other fascinating people. Get in-the-moment
+						updates on the things that interest you. And watch events unfold,
+						in real time, from every angle.</h3>
+				</p:outputPanel>
+			</div>
+			<div class="ui-g-3">
+				<div class="ui-g card">
+					Login
+					<div class="ui-g-12">
+						<h:panelGroup styleClass="md-inputfield" style="margin-top:10px;">
+							<p:inputText id="memail" required="true"
+								requiredMessage="Email is required" value="#{userBean.username}" />
+							<label>Email *</label>
+							<p:message for="memail" display="text" />
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12">
+						<h:panelGroup styleClass="md-inputfield">
+							<p:password value="#{userBean.password}" />
+							<label>Password *</label>
+						</h:panelGroup>
+					</div>
+					<div class="ui-g-12">
+						<p:commandButton action="#{userBean.login()}" value="Sign In"
+							ajax="false" icon="fa fa-sign-in" update="growl">
+							<f:setPropertyActionListener value="#{userBean.username}"
+								target="#{postingBean.username}" />
+						</p:commandButton>
+					</div>
+				</div>
+				<p:accordionPanel activeIndex="null" style="margin-top: 60px;">
+					<p:tab title="Create an account">
+						<p:growl id="growll" showDetail="true" />
+						<div class="ui-g-12">
+							<h:panelGroup styleClass="md-inputfield">
+								<p:inputText value="#{userBean.user.firstName}" />
+								<label>Firstname</label>
+							</h:panelGroup>
+						</div>
+						<div class="ui-g-12">
+							<h:panelGroup styleClass="md-inputfield">
+								<p:inputText value="#{userBean.user.lastName}" />
+								<label>Lastname</label>
+							</h:panelGroup>
+						</div>
+						<div class="ui-g-12">
+							<h:panelGroup styleClass="md-inputfield" style="margin-top:10px;">
+								<p:inputText value="#{userBean.user.email}" />
+								<label>Email</label>
+							</h:panelGroup>
+						</div>
+						<div class="ui-g-12">
+							<h:panelGroup styleClass="md-inputfield">
+								<p:password value="#{userBean.user.password}" />
+								<label>Password</label>
+							</h:panelGroup>
+						</div>
+
+						<div class="ui-g-12">
+							<p:commandButton action="#{userBean.createAccount()}"
+								value="Sign up for TechBuzz" icon="ui-icon-person"
+								update="growll" />
+						</div>
+					</p:tab>
+				</p:accordionPanel>
+
+			</div>
+			<div class="ui-g-1" />
+		</h:form>
+	</div>
+
+	<div class="login-footer" style="color: white;font-family: monaco;">Tech Buzz @ 2017</div>
+
+	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="ultima-layout" />
+</h:body>
+
+</html>

@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-10 card">
+				<p:tabView id="mainTab">
+					<p:tab title="Users">
+						<h:form id="userForm">
+							<p:growl id="growlUser" showDetail="true" />
+							<p:dataTable value="#{userBean.findAllUser()}" var="user"
+								tableStyle="width:auto;">
+								<p:column headerText="Number">
+								#{user.id}
+							</p:column>
+								<p:column headerText="First name">
+								#{user.firstName.toUpperCase()}
+							</p:column>
+								<p:column headerText="Last name">
+								#{user.lastName}
+							</p:column>
+								<p:column headerText="Email">
+								#{user.email}
+							</p:column>
+								<p:column headerText="Phone">
+								#{user.phone}
+							</p:column>
+								<p:column headerText="D.o.B">
+								#{user.dateOfBirth}
+							</p:column>
+								<p:column headerText="State">
+									<center>
+										<p:inputSwitch value="#{user.state}">
+											<p:ajax listener="#{userBean.activateUser(user)}"
+												update=":mainTab:userForm:growlUser" />
+										</p:inputSwitch>
+									</center>
+								</p:column>
+								<p:column headerText="Roles">
+									<center>
+										<p:commandLink update="@widgetVar(pickListdlg)"
+											oncomplete="PF('pickListdlg').show()"
+											action="#{administratorBean.getUserObject(user)}"
+											process="@this">
+											<i class="fa fa-expand" />
+										</p:commandLink>
+									</center>
+									<p:dialog header="Login" widgetVar="pickListdlg"
+										resizable="false" id="rightDialogId" responsive="true"
+										modal="true" hideEffect="scale">
+										<h:outputLabel
+											value="Assign roles  to  #{administratorBean.user.firstName} #{administratorBean.user.lastName}" />
+										<p:pickList value="#{administratorBean.roles}" var="role"
+											effect="bounce" itemValue="#{role}" itemLabel="#{role.name}"
+											showSourceControls="true" showTargetControls="true"
+											showCheckbox="true" responsive="true" showSourceFilter="true"
+											showTargetFilter="true" converter="entityConverter"
+											filterMatchMode="contains">
+
+											<f:facet name="sourceCaption">Available</f:facet>
+											<f:facet name="targetCaption">Assigned</f:facet>
+
+										</p:pickList>
+										<p:separator />
+										<p:commandButton value="Submit"
+											update="mainTab:userForm:growlUser" process="rightDialogId"
+											action="#{administratorBean.assignRoles()}" />
+									</p:dialog>
+								</p:column>
+							</p:dataTable>
+
+						</h:form>
+					</p:tab>
+					<p:tab title="Roles">
+
+						<p:separator />
+						<p:dataTable value="#{administratorBean.findAllRoles()}" var="r"
+							tableStyle="width:auto;">
+							<p:column headerText="ID">
+									#{r.id}
+							</p:column>
+							<p:column headerText="Name">
+								#{r.name}	
+							</p:column>
+							<p:column headerText="Description">
+								#{r.description}
+							</p:column>
+
+							<p:column headerText="Action">
+
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+					<p:tab title="Authorazation">
+
+					</p:tab>
+				</p:tabView>
+			</div>
+			<div class="ui-g-2" />
+
+		</div>
+	</ui:define>
+</ui:composition>
